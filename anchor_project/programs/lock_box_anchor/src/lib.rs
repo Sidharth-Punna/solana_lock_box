@@ -1,22 +1,19 @@
 use anchor_lang::prelude::*;
 
-pub mod states;
 pub mod errors;
 pub mod instructions;
+pub mod states;
 
 use instructions::*;
 
 declare_id!("CFqTCCmeoUyHUMmhZRJ5JyBLmSQWaqcqsd6A8rtH6MWR");
 
 #[program]
-pub mod anchor_project {
+pub mod lock_box_anchor {
     use super::*;
 
     /// Initialize a new LockBox vault with a target amount
-    pub fn initialize_lockbox(
-        ctx: Context<InitializeLockBox>,
-        target_amount: u64,
-    ) -> Result<()> {
+    pub fn initialize_lockbox(ctx: Context<InitializeLockBox>, target_amount: u64) -> Result<()> {
         instructions::initialize_lockbox(ctx, target_amount)
     }
 

@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program, BN } from "@coral-xyz/anchor";
-import { AnchorProject } from "../target/types/anchor_project";
+import { AnchorProject } from "../target/types/lock_box_anchor";
 import {
   PublicKey,
   SystemProgram,
