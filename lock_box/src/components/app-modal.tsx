@@ -8,21 +8,23 @@ export function AppModal({
   submit,
   submitDisabled,
   submitLabel,
+  trigger,
 }: {
   children: ReactNode
-  title: string
+  title: string | ReactNode
   submit?: () => void
   submitDisabled?: boolean
   submitLabel?: string
+  trigger?: ReactNode
 }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">{title}</Button>
+        {trigger || <Button variant="outline">{typeof title === 'string' ? title : 'Open'}</Button>}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{typeof title === 'string' ? title : title}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">{children}</div>
         <DialogFooter>
