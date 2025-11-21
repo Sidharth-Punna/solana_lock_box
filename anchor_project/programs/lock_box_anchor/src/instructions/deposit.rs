@@ -29,7 +29,6 @@ pub struct Deposit<'info> {
 
 pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
     require!(amount > 0, LockBoxError::InvalidDepositAmount);
-    require!(ctx.accounts.lockbox.is_active, LockBoxError::VaultInactive);
 
     // Transfer SOL from owner to vault PDA
     let cpi_context = CpiContext::new(

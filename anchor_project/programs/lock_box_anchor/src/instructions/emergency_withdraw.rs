@@ -31,9 +31,6 @@ pub struct EmergencyWithdraw<'info> {
 pub fn emergency_withdraw(ctx: Context<EmergencyWithdraw>) -> Result<()> {
     let lockbox = &ctx.accounts.lockbox;
 
-    // Check if vault is still active
-    require!(lockbox.is_active, LockBoxError::VaultInactive);
-
     // Withdraw everything in the vault
     let withdraw_amount = ctx.accounts.vault.lamports();
 

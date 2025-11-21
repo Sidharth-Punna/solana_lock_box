@@ -30,9 +30,6 @@ pub struct Withdraw<'info> {
 pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
     let lockbox = &ctx.accounts.lockbox;
 
-    // Check if vault is active
-    require!(lockbox.is_active, LockBoxError::VaultInactive);
-
     // Check if target has been reached
     require!(lockbox.has_reached_target, LockBoxError::TargetNotReached);
 

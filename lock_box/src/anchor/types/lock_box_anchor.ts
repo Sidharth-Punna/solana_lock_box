@@ -323,10 +323,6 @@ export type LockBoxAnchor = {
             type: 'i64'
           },
           {
-            name: 'isActive'
-            type: 'bool'
-          },
-          {
             name: 'hasReachedTarget'
             type: 'bool'
           },

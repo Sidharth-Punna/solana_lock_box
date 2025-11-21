@@ -317,10 +317,6 @@
             "type": "i64"
           },
           {
-            "name": "is_active",
-            "type": "bool"
-          },
-          {
             "name": "has_reached_target",
             "type": "bool"
           },

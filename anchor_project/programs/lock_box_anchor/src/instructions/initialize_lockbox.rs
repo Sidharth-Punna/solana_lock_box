@@ -29,7 +29,6 @@ pub fn initialize_lockbox(ctx: Context<InitializeLockBox>, target_amount: u64) -
     lockbox.target_amount = target_amount;
     lockbox.current_balance = 0;
     lockbox.created_at = clock.unix_timestamp;
-    lockbox.is_active = true;
     lockbox.has_reached_target = false;
     lockbox.bump = ctx.bumps.lockbox;
 
