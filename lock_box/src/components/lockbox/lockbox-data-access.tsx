@@ -2,9 +2,10 @@
 
 import { AnchorProvider } from '@coral-xyz/anchor'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { PublicKey, SystemProgram } from '@solana/web3.js'
+import { PublicKey, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { BN } from '@coral-xyz/anchor'
+import { toast } from 'sonner'
 import { getLockBoxProgram, LOCK_BOX_PROGRAM_ID } from '@/anchor/lock_box_exports'
 
 // Helper function to derive LockBox PDA
@@ -77,7 +78,7 @@ export function useGetLockBox({ address }: { address: PublicKey | null | undefin
           },
           address: lockboxPda,
         }
-      } catch (error) {
+      } catch {
         // Account doesn't exist
         return null
       }
@@ -100,22 +101,27 @@ export function useInitializeLockBox({ address }: { address: PublicKey | null | 
       }
 
       const program = getLockBoxProgram(provider)
-      const [lockboxPda] = getLockBoxPda(address)
 
       const tx = await program.methods
         .initializeLockbox(new BN(input.targetAmount))
         .accounts({
-          lockbox: lockboxPda,
           owner: address,
-          systemProgram: SystemProgram.programId,
-        } as any)
+        })
         .rpc()
 
       return tx
     },
-    onSuccess: async () => {
+    onSuccess: async (tx) => {
+      toast.success('Lock Box Created Successfully', {
+        description: `Your Lock Box has been initialized. Transaction: ${tx.slice(0, 8)}...`,
+      })
       await client.invalidateQueries({
         queryKey: ['get-lockbox', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
+      })
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to Create Lock Box', {
+        description: error.message || 'An error occurred while initializing your Lock Box. Please try again.',
       })
     },
   })
@@ -135,22 +141,21 @@ export function useDeposit({ address }: { address: PublicKey | null | undefined 
       }
 
       const program = getLockBoxProgram(provider)
-      const [lockboxPda] = getLockBoxPda(address)
-      const [vaultPda] = getVaultPda(lockboxPda)
 
       const tx = await program.methods
         .deposit(new BN(input.amount))
         .accounts({
-          lockbox: lockboxPda,
-          vault: vaultPda,
           owner: address,
-          systemProgram: SystemProgram.programId,
-        } as any)
+        })
         .rpc()
 
-      return tx
+      return { tx, amount: input.amount }
     },
-    onSuccess: async () => {
+    onSuccess: async ({ tx, amount }) => {
+      const amountInSol = amount / LAMPORTS_PER_SOL
+      toast.success('Deposit Successful', {
+        description: `${amountInSol.toFixed(4)} SOL has been deposited to your Lock Box. Transaction: ${tx.slice(0, 8)}...`,
+      })
       await Promise.all([
         client.invalidateQueries({
           queryKey: ['get-lockbox', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
@@ -159,6 +164,11 @@ export function useDeposit({ address }: { address: PublicKey | null | undefined 
           queryKey: ['get-balance', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
         }),
       ])
+    },
+    onError: (error: Error) => {
+      toast.error('Deposit Failed', {
+        description: error.message || 'An error occurred while depositing funds. Please try again.',
+      })
     },
   })
 }
@@ -177,22 +187,21 @@ export function useWithdraw({ address }: { address: PublicKey | null | undefined
       }
 
       const program = getLockBoxProgram(provider)
-      const [lockboxPda] = getLockBoxPda(address)
-      const [vaultPda] = getVaultPda(lockboxPda)
 
       const tx = await program.methods
         .withdraw(new BN(input.amount))
         .accounts({
-          lockbox: lockboxPda,
-          vault: vaultPda,
           owner: address,
-          systemProgram: SystemProgram.programId,
-        } as any)
+        })
         .rpc()
 
-      return tx
+      return { tx, amount: input.amount }
     },
-    onSuccess: async () => {
+    onSuccess: async ({ tx, amount }) => {
+      const amountInSol = amount / LAMPORTS_PER_SOL
+      toast.success('Withdrawal Successful', {
+        description: `${amountInSol.toFixed(4)} SOL has been withdrawn from your Lock Box. Transaction: ${tx.slice(0, 8)}...`,
+      })
       await Promise.all([
         client.invalidateQueries({
           queryKey: ['get-lockbox', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
@@ -201,6 +210,11 @@ export function useWithdraw({ address }: { address: PublicKey | null | undefined
           queryKey: ['get-balance', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
         }),
       ])
+    },
+    onError: (error: Error) => {
+      toast.error('Withdrawal Failed', {
+        description: error.message || 'An error occurred while withdrawing funds. Please try again.',
+      })
     },
   })
 }
@@ -219,22 +233,20 @@ export function useEmergencyWithdraw({ address }: { address: PublicKey | null | 
       }
 
       const program = getLockBoxProgram(provider)
-      const [lockboxPda] = getLockBoxPda(address)
-      const [vaultPda] = getVaultPda(lockboxPda)
 
       const tx = await program.methods
         .emergencyWithdraw()
         .accounts({
-          lockbox: lockboxPda,
-          vault: vaultPda,
           owner: address,
-          systemProgram: SystemProgram.programId,
-        } as any)
+        })
         .rpc()
 
       return tx
     },
-    onSuccess: async () => {
+    onSuccess: async (tx) => {
+      toast.success('Emergency Withdrawal Completed', {
+        description: `All funds have been withdrawn and your Lock Box has been closed. Transaction: ${tx.slice(0, 8)}...`,
+      })
       await Promise.all([
         client.invalidateQueries({
           queryKey: ['get-lockbox', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
@@ -243,6 +255,11 @@ export function useEmergencyWithdraw({ address }: { address: PublicKey | null | 
           queryKey: ['get-balance', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
         }),
       ])
+    },
+    onError: (error: Error) => {
+      toast.error('Emergency Withdrawal Failed', {
+        description: error.message || 'An error occurred during the emergency withdrawal. Please try again.',
+      })
     },
   })
 }
@@ -261,22 +278,20 @@ export function useCloseLockBox({ address }: { address: PublicKey | null | undef
       }
 
       const program = getLockBoxProgram(provider)
-      const [lockboxPda] = getLockBoxPda(address)
-      const [vaultPda] = getVaultPda(lockboxPda)
 
       const tx = await program.methods
         .closeLockbox()
         .accounts({
-          lockbox: lockboxPda,
           owner: address,
-          vault: vaultPda,
-          systemProgram: SystemProgram.programId,
-        } as any)
+        })
         .rpc()
 
       return tx
     },
-    onSuccess: async () => {
+    onSuccess: async (tx) => {
+      toast.success('Lock Box Closed Successfully', {
+        description: `Your Lock Box has been closed and rent (~0.002 SOL) has been returned to your wallet. Transaction: ${tx.slice(0, 8)}...`,
+      })
       await Promise.all([
         client.invalidateQueries({
           queryKey: ['get-lockbox', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
@@ -285,6 +300,12 @@ export function useCloseLockBox({ address }: { address: PublicKey | null | undef
           queryKey: ['get-balance', { endpoint: connection.rpcEndpoint, address: address?.toString() }],
         }),
       ])
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to Close Lock Box', {
+        description:
+          error.message || 'An error occurred while closing your Lock Box. Please ensure it is empty and try again.',
+      })
     },
   })
 }

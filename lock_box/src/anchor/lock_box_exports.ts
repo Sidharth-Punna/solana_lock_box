@@ -1,7 +1,7 @@
 // Anchor helper for the `lock_box_anchor` program
 // This provides typed program access, IDL exports, and cluster-based program ID selection.
 
-import { AnchorProvider, Program, Idl } from '@coral-xyz/anchor'
+import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { Cluster, PublicKey } from '@solana/web3.js'
 import LockBoxAnchorIDL from './idl/lock_box_anchor.json'
 import type { LockBoxAnchor } from './types/lock_box_anchor'

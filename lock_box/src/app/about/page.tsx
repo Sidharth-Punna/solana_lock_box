@@ -1,6 +1,6 @@
 import { GradualSpacing } from '@/components/ui/gradual-spacing-test'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Lock, Target, Wallet, Shield, Zap, Code, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Lock, Target, Wallet, Shield } from 'lucide-react'
 
 export default function AboutPage() {
   return (
@@ -37,9 +37,9 @@ export default function AboutPage() {
               leverages smart contracts to ensure your funds are safely locked until you reach your target savings goal.
             </p>
             <p className="text-muted-foreground leading-relaxed text-base">
-              Whether you're saving for a specific purchase, building an emergency fund, or working towards a financial
-              milestone, LockBox provides a disciplined approach to saving by preventing premature withdrawals until
-              your goal is achieved.
+              Whether you&apos;re saving for a specific purchase, building an emergency fund, or working towards a
+              financial milestone, LockBox provides a disciplined approach to saving by preventing premature withdrawals
+              until your goal is achieved.
             </p>
           </CardContent>
         </Card>
@@ -75,7 +75,8 @@ export default function AboutPage() {
                   <div>
                     <h3 className="font-semibold text-sm mb-1">Secure Storage</h3>
                     <p className="text-xs text-muted-foreground">
-                      Your funds are stored in a Program Derived Address (PDA) vault, secured by Solana's blockchain.
+                      Your funds are stored in a Program Derived Address (PDA) vault, secured by Solana&apos;s
+                      blockchain.
                     </p>
                   </div>
                 </div>
@@ -88,7 +89,8 @@ export default function AboutPage() {
                   <div>
                     <h3 className="font-semibold text-sm mb-1">Disciplined Saving</h3>
                     <p className="text-xs text-muted-foreground">
-                      Withdrawals are only allowed once you've reached your target amount, helping you stay committed.
+                      Withdrawals are only allowed once you&apos;ve reached your target amount, helping you stay
+                      committed.
                     </p>
                   </div>
                 </div>

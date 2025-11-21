@@ -281,17 +281,15 @@ export function LockBoxActions({ data }: LockBoxActionsProps) {
               Emergency Withdrawal
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <div className="space-y-2">
-                <span>
-                  This action cannot be undone. This will withdraw ALL funds ({balanceInSol.toFixed(4)} SOL) from your
-                  Lock Box.
-                </span>
-                <div className="font-semibold text-destructive">
-                  ⚠️ Warning: The LockBox account will be automatically closed and the rent (~0.002 SOL) will be
-                  returned to your wallet.
-                </div>
-                <span>You will need to create a new Lock Box to continue saving.</span>
-              </div>
+              <span className="block mb-2">
+                This action cannot be undone. This will withdraw ALL funds ({balanceInSol.toFixed(4)} SOL) from your
+                Lock Box.
+              </span>
+              <span className="block font-semibold text-destructive mb-2">
+                ⚠️ Warning: The LockBox account will be automatically closed and the rent (~0.002 SOL) will be returned
+                to your wallet.
+              </span>
+              <span className="block">You will need to create a new Lock Box to continue saving.</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

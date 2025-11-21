@@ -4,7 +4,7 @@ import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Lock, TrendingUp, Calendar, AlertTriangle } from 'lucide-react'
+import { Lock, TrendingUp, Calendar } from 'lucide-react'
 import { format } from 'date-fns'
 import { LockBoxActions } from './lockbox-actions'
 
