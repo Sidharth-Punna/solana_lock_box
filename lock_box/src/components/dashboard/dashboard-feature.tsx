@@ -23,7 +23,7 @@ export function DashboardFeature() {
     <div className="w-full space-y-6 py-8">
       {/* Header Card */}
       <Card className="w-full">
-        <div className="flex items-center justify-between gap-6 px-6 py-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 px-6 py-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
               <Lock className="w-6 h-6 text-primary" />
@@ -34,7 +34,11 @@ export function DashboardFeature() {
             </div>
           </div>
           {!lockbox && !isLoading && (
-            <Button size="lg" onClick={() => setIsCreateModalOpen(true)} className="flex-shrink-0">
+            <Button
+              size="lg"
+              onClick={() => setIsCreateModalOpen(true)}
+              className="mt-4 md:mt-0 flex-shrink-0 w-full md:w-auto"
+            >
               <Plus className="mr-2 h-5 w-5" />
               Create Lock Box
             </Button>
