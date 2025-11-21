@@ -16,9 +16,20 @@ import { AppModal } from '@/components/app-modal'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountBalance({ address }: { address: PublicKey }) {
   const query = useGetBalance({ address })
+
+  if (query.isLoading) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="flex items-baseline gap-2">
+          <Skeleton className="h-14 w-50" />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-center gap-3">
@@ -29,7 +40,7 @@ export function AccountBalance({ address }: { address: PublicKey }) {
         </h1>
         <span className="text-2xl font-semibold text-muted-foreground">SOL</span>
       </div>
-      <Button variant="ghost" size="icon" onClick={() => query.refetch()} className="h-8 w-8" title="Refresh balance">
+      <Button variant="ghost" size="icon" onClick={() => query.refetch()} title="Refresh balance">
         <RefreshCw className={`h-4 w-4 ${query.isFetching ? 'animate-spin' : ''}`} />
       </Button>
     </div>
@@ -86,7 +97,7 @@ export function AccountButtons({ address }: { address: PublicKey }) {
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
       <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-lg border">
         <Wallet className="h-4 w-4 text-muted-foreground" />
-        <code className="text-sm font-mono">{ellipsify(address.toString(), 12)}</code>
+        <code className="text-sm font-mono">{ellipsify(address.toString(), 10)}</code>
         <Button variant="ghost" size="icon" className="h-6 w-6" onClick={copyToClipboard} title="Copy address">
           {copied ? <CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
         </Button>
@@ -136,6 +147,53 @@ export function AccountTransactions({ address }: { address: PublicKey }) {
         </div>
       </CardHeader>
       <CardContent>
+        {query.isLoading && (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
+                    <div className="flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Signature
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Hash className="h-4 w-4" />
+                      Slot
+                    </div>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      Block Time
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[...Array(5)].map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Skeleton className="h-4 w-32" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-4 w-20 ml-auto" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-40" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-4 w-16 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
         {query.isError && (
           <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-destructive">
             <div className="flex items-center gap-2">
@@ -144,7 +202,7 @@ export function AccountTransactions({ address }: { address: PublicKey }) {
             </div>
           </div>
         )}
-        {query.isSuccess && (
+        {query.isSuccess && !query.isLoading && (
           <div>
             {query.data.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">

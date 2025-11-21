@@ -1,6 +1,12 @@
 import { GradualSpacing } from '@/components/ui/gradual-spacing-test'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Lock, Target, Wallet, Shield } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About LockBox',
+  description: 'Learn more about LockBox, a decentralized savings application built on Solana blockchain',
+}
 
 export default function AboutPage() {
   return (

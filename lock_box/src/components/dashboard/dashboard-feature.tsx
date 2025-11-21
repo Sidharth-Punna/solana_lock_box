@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Card, CardDescription, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Lock, Plus } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useGetLockBox } from '@/components/lockbox/lockbox-data-access'
 import { LockBoxCreateModal } from '@/components/lockbox/lockbox-create-modal'
 import { LockBoxCard } from '@/components/lockbox/lockbox-card'
@@ -21,35 +21,10 @@ export function DashboardFeature() {
 
   return (
     <div className="w-full space-y-6 py-8">
-      {/* Header Card */}
-      <Card className="w-full">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 px-6 py-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Lock className="w-6 h-6 text-primary" />
-            </div>
-            <div className="space-y-1">
-              <CardTitle className="text-2xl font-bold">LockBox</CardTitle>
-              <CardDescription className="text-base">Meet your saving goals with Lock Box</CardDescription>
-            </div>
-          </div>
-          {!lockbox && !isLoading && (
-            <Button
-              size="lg"
-              onClick={() => setIsCreateModalOpen(true)}
-              className="mt-4 md:mt-0 flex-shrink-0 w-full md:w-auto"
-            >
-              <Plus className="mr-2 h-5 w-5" />
-              Create Lock Box
-            </Button>
-          )}
-        </div>
-      </Card>
-
       {/* Loading State */}
       {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Spinner />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <LockBoxCardSkeleton />
         </div>
       )}
 
@@ -83,5 +58,63 @@ export function DashboardFeature() {
       {/* Create Modal */}
       <LockBoxCreateModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
+  )
+}
+
+function LockBoxCardSkeleton() {
+  return (
+    <Card className="w-full">
+      <CardContent>
+        {/* Header Section Skeleton */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3 flex-1">
+            <Skeleton className="w-12 h-12 rounded-full" />
+            <div className="flex-1 min-w-0 space-y-2">
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-3 w-24" />
+            </div>
+          </div>
+        </div>
+
+        {/* Progress Section Skeleton */}
+        <div className="space-y-3 mb-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-4 w-16" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <Skeleton className="h-3 w-full rounded-full" />
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+        </div>
+
+        {/* Stats Grid Skeleton */}
+        <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b">
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-3 w-12" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-3 w-12" />
+          </div>
+        </div>
+
+        {/* Actions Section Skeleton */}
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
+          <Skeleton className="h-10 w-full sm:w-32" />
+          <Skeleton className="h-10 w-full sm:w-32" />
+          <Skeleton className="h-10 w-full sm:w-32" />
+        </div>
+
+        {/* Footer Skeleton */}
+        <div className="mt-4 pt-4 border-t">
+          <Skeleton className="h-3 w-40" />
+        </div>
+      </CardContent>
+    </Card>
   )
 }
