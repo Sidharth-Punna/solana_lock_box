@@ -109,8 +109,10 @@ To run the test suite:
 
 ```bash
 yarn install
-anchor test
+anchor test --provider.cluster localnet
 ```
+
+**Note:** By default, `anchor test` runs on devnet which is not ideal. Use `--provider.cluster localnet` to run tests on localnet for faster execution and better reliability.
 
 ### Additional Notes for Evaluators
 

@@ -24,7 +24,7 @@ wallet = "~/.config/solana/id.json"
 
 [provider.devnet]
 cluster = "devnet"
-wallet = "~/.config/solana/devnet.json"   # use your Devnet key here
+wallet = "~/.config/solana/devnet.json"
 
 
 
